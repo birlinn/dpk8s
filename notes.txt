@@ -1,13 +1,13 @@
 minikube start -p dpk8s --kubernetes-version=v1.21.2
 
 
-mkdir dpk8s && cd dpk8s
+(mkdir dpk8s && cd dpk8s)
 
 
 ### ArgoCD
 
 
-mkdir argocd && cd argocd
+(cd argocd)
 
 
 # create argocd ns
@@ -75,7 +75,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 # check login
 
-argocd login 10.99.59.139
+argocd login <ARGOCD-SERVER>
 
 # change password
 
@@ -91,27 +91,30 @@ argocd cluster add dpk8s
 # it might be useful to verify the "dest-server" field:
 # argocd cluster list
 # SERVER                          NAME        VERSION  STATUS   MESSAGE
-# https://192.168.49.2:8443       dpk8s                Unknown  Cluster has no application and not being monitored.
 # https://kubernetes.default.svc  in-cluster           Unknown  Cluster has no application and not being monitored.
 
 argocd app create guestbook \
-       --repo https://github.com/birlinn/argocd-example-apps.git \
-       --path guestbook \
-       --dest-server https://192.168.49.2:8443 \
-       --dest-namespace default \
+       --repo https://github.com/birlinn/dpk8s.git \
+       --path argocd-example-apps/guestbook \
+       --dest-server https://kubernetes.default.svc \
+       --dest-namespace argocd-guestbook \
        --upsert
 
 argocd app sync guestbook
 
 argocd app get guestbook
 
-cd ../
+# get an external IP by patching the guestbook-ui service to type load balancer 
+
+kubectl patch svc guestbook-ui -n argocd-guestbook -p '{"spec": {"type": "LoadBalancer"}}'
+
+(cd ../)
 
 
 ### Longhorn
 
 
-mkdir longhorn && cd longhorn
+(cd longhorn)
 
 
 # install required OS packages on all minikube nodes
@@ -133,9 +136,35 @@ done
 ./environment_check.sh
 
 
-# install longhorn
+# create argocd longhorn application
 
-[ONLINE: wget https://raw.githubusercontent.com/longhorn/longhorn/v1.2.2/deploy/longhorn.yaml]
+argocd app create longhorn \
+       --repo https://github.com/birlinn/dpk8s.git \
+       --path longhorn \
+       --dest-server https://kubernetes.default.svc \
+       --dest-namespace longhorn-system \
+       --upsert
 
-kubectl apply -f longhorn.yaml
+
+# sync it
+
+argocd app sync longhorn
+
+
+# verify it
+
+argocd app get longhorn
+
+
+# get an external IP by patching the longhorn-frontend service to type load balancer
+
+kubectl patch svc longhorn-frontend -n longhorn-system -p '{"spec": {"type": "LoadBalancer"}}'
+
+(cd ../)
+
+
+### Linkerd
+
+
+(cd linkerd)
 
