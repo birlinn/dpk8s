@@ -177,6 +177,19 @@ argocd app create cert-manager \
 argocd app sync cert-manager
 
 
+### Sealed secrets
+
+
+argocd app create sealed-secrets \
+       --repo https://github.com/birlinn/dpk8s.git \
+       --path sealed-secrets \
+       --dest-server https://kubernetes.default.svc \
+       --dest-namespace kube-system \
+       --upsert
+
+argocd app sync sealed-secrets
+
+
 ### Linkerd
 
 
