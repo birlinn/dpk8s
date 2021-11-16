@@ -17,7 +17,7 @@ kubectl create namespace argocd
 
 # apply installation manifest
 
-kubectl apply -n argocd -f install.yaml
+kubectl apply -n argocd -f argocd-main.yaml
 
 [ONLINE: kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml]
 
@@ -168,3 +168,55 @@ kubectl patch svc longhorn-frontend -n longhorn-system -p '{"spec": {"type": "Lo
 
 (cd linkerd)
 
+
+# install the linkerd cli on minikube host as per instructions here: https://linkerd.io/2.11/getting-started/
+
+
+# run linkerd cluster preflight checks
+
+linkerd check --pre
+
+
+# pipe the output of "linkerd install" to a yaml file and git commit & push it to our repo
+# linkerd install > install.yaml
+
+
+# create argocd linkerd application
+
+argocd app create linkerd \
+       --repo https://github.com/birlinn/dpk8s.git \
+       --path linkerd \
+       --dest-server https://kubernetes.default.svc \
+       --dest-namespace linkerd \
+       --upsert
+
+
+# sync it
+
+argocd app sync linkerd
+
+
+# verify it
+
+argocd app get linkerd
+
+
+# verify it again
+
+linkerd check
+
+
+# deploy the linkerd demo app, emojivoto
+
+
+# wget https://run.linkerd.io/emojivoto.yml
+
+# git commit & push it to our repo
+
+
+# get an external IP by patching the web-svc service to type load balancer
+
+kubectl patch svc web-svc -n emojivoto -p '{"spec": {"type": "LoadBalancer"}}'
+
+
+kubectl get -n emojivoto deploy -o yaml | linkerd inject > emojivoto-enmesh.yaml
