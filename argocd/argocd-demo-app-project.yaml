@@ -33,7 +33,7 @@ spec:
   - namespace: linkerd
     server: https://kubernetes.default.svc
   sourceRepos:
-  - git://git-server.scm:9418/linkerd-examples.git
+  - https://github.com/birlinn/dpk8s.git
   - https://charts.jetstack.io
   - https://github.com/BuoyantIO/emojivoto.git
   - https://helm.linkerd.io/stable
