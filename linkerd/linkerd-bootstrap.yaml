@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: linkerd
     server: https://kubernetes.default.svc
-  project: demo
+  project: default
   source:
-    path: gitops/resources/linkerd
-    repoURL: git://git-server.scm:9418/linkerd-examples.git
+    path: linkerd
+    repoURL: https://github.com/birlinn/dpk8s.git
