@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: emojivoto
     server: https://kubernetes.default.svc
-  project: demo
+  project: default
   source:
-    path: gitops/resources/emojivoto
-    repoURL: git://git-server.scm:9418/linkerd-examples.git
+    path: emojivoto
+    repoURL: https://github.com/birlinn/dpk8s.git

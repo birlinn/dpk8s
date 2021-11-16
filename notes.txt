@@ -241,6 +241,15 @@ linkerd check
 # git commit & push it to our repo
 
 
+argocd app create emojivoto \
+       --repo https://github.com/birlinn/dpk8s.git \
+       --path emojivoto \
+       --dest-server https://kubernetes.default.svc \
+       --dest-namespace emojivoto \
+       --upsert
+
+
+
 # get an external IP by patching the web-svc service to type load balancer
 
 kubectl patch svc web-svc -n emojivoto -p '{"spec": {"type": "LoadBalancer"}}'
