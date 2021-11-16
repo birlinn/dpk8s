@@ -249,10 +249,14 @@ argocd app create emojivoto \
        --upsert
 
 
+argocd app sync emojivoto
+
+argocd app get emojivoto
 
 # get an external IP by patching the web-svc service to type load balancer
 
-kubectl patch svc web-svc -n emojivoto -p '{"spec": {"type": "LoadBalancer"}}'
 
+linkerd viz install | kubectl apply -f -
 
-kubectl get -n emojivoto deploy -o yaml | linkerd inject > emojivoto-enmesh.yaml
+linkerd check
+
