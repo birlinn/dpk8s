@@ -1,4 +1,4 @@
-minikube start -p dpk8s --kubernetes-version=v1.21.2
+minikube start -p dpk8s -n 5 --kubernetes-version=v1.21.2
 
 
 (mkdir dpk8s && cd dpk8s)
@@ -161,6 +161,17 @@ argocd app get longhorn
 kubectl patch svc longhorn-frontend -n longhorn-system -p '{"spec": {"type": "LoadBalancer"}}'
 
 (cd ../)
+
+
+### Cert-manager
+
+
+argocd app create cert-manager \
+       --repo https://github.com/birlinn/dpk8s.git \
+       --path cert-manager \
+       --dest-server https://kubernetes.default.svc \
+       --dest-namespace cert-manager \
+       --upsert
 
 
 ### Linkerd
