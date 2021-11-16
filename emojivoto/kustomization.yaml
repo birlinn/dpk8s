@@ -10,25 +10,25 @@ patchesJson6902:
     name: emoji
     namespace: emojivoto
     version: v1
-  path: ./auto-inject
+  path: ./auto-inject.yaml
 - target:
     group: apps
     kind: Deployment
     name: voting
     namespace: emojivoto
     version: v1
-  path: ./auto-inject
+  path: ./auto-inject.yaml
 - target:
     group: apps
     kind: Deployment
     name: vote-bot
     namespace: emojivoto
     version: v1
-  path: ./auto-inject
+  path: ./auto-inject.yaml
 - target:
     group: apps
     kind: Deployment
     name: web
     namespace: emojivoto
     version: v1
-  path: ./auto-inject
+  path: ./auto-inject.yaml
