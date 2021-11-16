@@ -34,7 +34,3 @@ spec:
     server: https://kubernetes.default.svc
   sourceRepos:
   - https://github.com/birlinn/dpk8s.git
-  - https://charts.jetstack.io
-  - https://github.com/BuoyantIO/emojivoto.git
-  - https://helm.linkerd.io/stable
-  - https://kubernetes-charts.storage.googleapis.com
